@@ -1,0 +1,38 @@
+
+services:
+
+  backend:
+    build:
+      context: .            # project root — Dockerfile sits here
+      dockerfile: Dockerfile
+    container_name: sim-backend
+    ports:
+      - "8001:8001"         # expose directly for curl / WebSocket client testing
+    networks:
+      - sim-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
+      interval: 10s
+      timeout:  5s
+      retries:  3
+      start_period: 5s
+
+  frontend:
+    build:
+      context: frontend     # frontend/ directory — Dockerfile sits there
+      dockerfile: Dockerfile
+    container_name: sim-frontend
+    ports:
+      - "3000:80"           # browse to http://localhost:3000
+    networks:
+      - sim-net
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+networks:
+  sim-net:
+    driver: bridge

@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+
+frontend/
+
+# Test files
+test_stage*.py
+demo.py
+
+# Git
+.git/
+.gitignore
+
+# Misc
+*.md
+.env
+.env.*
